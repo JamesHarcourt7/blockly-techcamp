@@ -45,6 +45,8 @@ export function controls_repeat_ext(block: Block, generator: PythonGenerator) {
 export const controls_repeat = controls_repeat_ext;
 
 export function controls_whileUntil(block: Block, generator: PythonGenerator) {
+  (generator as AnyDuringMigration).definitions_['import_time'] =
+        'import time';
   // Do while/until loop.
   const until = block.getFieldValue('MODE') === 'UNTIL';
   let argument0 =
@@ -58,7 +60,7 @@ export function controls_whileUntil(block: Block, generator: PythonGenerator) {
   if (until) {
     argument0 = 'not ' + argument0;
   }
-  return 'while ' + argument0 + ':\n' + branch;
+  return 'while ' + argument0 + ':\n' + branch + '\n' + '  time.sleep(0.1)\n';
 }
 
 export function controls_for(block: Block, generator: PythonGenerator) {
